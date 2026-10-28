@@ -1,0 +1,53 @@
+﻿NATs are used to allow access to internet users to servers in the DMZ, typically to a Load Balancer but it can be a Server. There are 2 types of NATs: one for general internet traffic and the other one for a specific audience, like a B2B with a vendor where the traffic will be limited so there is no need to do a penetration testing
+(Security Team i.e. dl-dmzsecurity@anthem.com)
+
+Discovery
+
+
+Pre-cutover
+1.	Request a target NAT IP to the FW team -NOT the DNS team- (for example: REQ8502223/RITM13562045) using the Firewall Change Version 2 request (https://elevancehealth.service-now.com/ess?id=ant_sc_cat_item&sys_id=5a477b8a1b98b8144c3cedf5624bcb0d), providing the following information:
+	a.	Application using the NAT
+	b.	Current NAT IP and port used
+	c.	Current VIP name
+	d.	Internal VIP IP
+	e.	Target users for this NAT
+
+1.1	Once target NAT IP is received, it is needed to request the corresponding DNS entry in the external DNS, the new entry will be the same FQDN as the source server/VIP, but adding the corresponding "mexxx-" prefix should be created.(https://elevancehealth.service-now.com/ess?id=ant_sc_cat_item&sys_id=a016d2d5db074b00eed27bedae96190c)
+
+2.	Create a FW rule request: 
+	-for access to general internet traffic (NAT): request access from Any/0.0.0.0, to the new requested target NAT IP, not to be implemented until authorized by the Security team after the penetration test, made during the cutover.
+	-If it is a limited traffic NAT (B2B), there should be a list of Source IPs provided by the Application Owners, to the new requested target NAT IP, in this case there is no need to wait for the penetration test to be made during the cutover, but the Security team's approval is still required for the FW team to process the request. 
+
+3.	Once that target NAT IP is received, the Architects would provide the technical information (below) to allow the application owners fill in the ONLY THE FIRST PAGE of the form “Website Security Pre-Assessement v1.0" (https://kyndryl.box.com/s/4ch1zhyg1x672mklqevisyb3wmjebdc9)
+	a.	External FQDN
+	b.	Hostname
+	c.	External IP - the requested new target NAT IP
+	d.	Internal IP - the new target DMZ address for the F5 or server
+
+4.	Once the application owner has finished filling in ONLY THE FIRST PAGE of that form, the form needs to be sent to: dl-dmzsecurity@anthem.com, along with the FW request.
+
+T-1
+5.	If there is NAT for general internet traffic, PM needs to request the Security Team needs to schedule a penetration test during the cutover.
+
+Cutover
+6.	If there is NAT for general internet traffic, once the application is working,  the Security Team, performs a penetration test , after which they will authorize, or not, the opening of the ports requested to the FW team for that purpose, thus allowing the access from the internet.
+
+================
+NATs - Segments
+Access - 162.95.81.x
+Ebusiness - 162.95.84.x, 162.95.86.x
+For Harrisonburg, there are NAT's in 162.95.222.x (but unsure if this is Access, Ebiz, or something else)
+
+FW Team contacts
+ James Cornish
+ William Trent Jr
+Security Team Contact
+ Terry Pack 
+ Samuel Smith
+ Heaston Wilson
+
+(dl-dmzsecurity@anthem.com)
+================
+==> ** fill in the form and send it to Terry Pack in T-5 after the scope is finalized.
+==> ** include in Kickoff and runbook
+==> Is there a NAT list
